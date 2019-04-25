@@ -35,6 +35,7 @@
     <table id="map" cellspacing="0"></table>
 
     <div id="popup-background" style="display: none"></div>
+    <div id="popup-background2" style="display: none"></div>
 
     <!-- skill -->
     <div id="skill-panel" style="display: none" class="popup-maindiv panel panel-default">
@@ -57,6 +58,14 @@
         </div>
     </div>
     
+    <!-- skill full info  -->
+    <div id="skill-full-info-panel" style="display: none; width: 60%;" class="popup-maindiv2 panel panel-default">
+        <div id="skill-full-info-panel-title" class="panel-heading" style="background: gainsboro">
+            <span id="skill-full-info-close" class="glyphicon glyphicon-remove close" aria-hidden="true"></span>
+        </div>
+
+        <div id="skill-full-info-body" class="panel-body" style="overflow: scroll"></div>
+    </div>
 
     <script>
         createMap(10, 10);

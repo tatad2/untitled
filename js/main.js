@@ -56,10 +56,8 @@ function moveTo(x, y) {
 }
 
 var skillInfo = [
-    { id: 0, page: 0, name: "test skill", pos: [20, 20], resUrl: "res/fireball.png", pre: [], learned: true, 
-      describe: "test describe" },
-    { id: 1, page: 0, name: "test skill2", pos: [30, 50], resUrl: "res/fireball.png", pre: [], learned: false,
-      describe: "test2 describe" }
+    { id: 0, page: 0, name: "test skill", pos: [20, 20], resUrl: "res/fireball.png", pre: [], learned: true, describe: "test describe" },
+    { id: 1, page: 0, name: "test skill2", pos: [30, 50], resUrl: "res/fireball.png", pre: [], learned: false, describe: "test2 describe" }
 ];
 
 function clearSkillPage() {
@@ -104,6 +102,14 @@ function displaySkillPage(pageId) {
     }
 }
 
+function displaySkillFullInfo(skillId) {
+    document.getElementById("popup-background2").style.display = "";
+    document.getElementById("skill-full-info-panel").style.display = "";
+
+    var temp = document.getElementById("skill-full-info-panel-title").innerHTML;
+    document.getElementById("skill-full-info-panel-title").innerHTML = skillInfo[skillId].name + temp;
+}
+
 $(document).ready( function() {
 
     $("#skill-open").click( function() {
@@ -118,8 +124,13 @@ $(document).ready( function() {
         document.getElementById("skill-panel").style.display = "none"; 
     } )
     
+    $("#skill-full-info-panel").on("click", "#skill-full-info-close", function() {
+        document.getElementById("popup-background2").style.display = "none"; 
+        document.getElementById("skill-full-info-panel").style.display = "none"; 
+    } )
+
     $(".skill-pages").click( function() {
-        displaySkillPage( Number(this.id.slice(-1)) );
+        displaySkillPage( Number(this.id.slice(4)) ); // page1
     } )
 
     $("#skill-body").on("mouseenter", ".skill-block", function() {
@@ -128,6 +139,11 @@ $(document).ready( function() {
 
     $("#skill-body").on("mouseleave", ".skill-block", function() {
         $(this).popover("hide");
+    } )
+
+    $("#skill-body").on("click", ".skill-block", function() {
+        $(this).popover("hide");
+        displaySkillFullInfo( Number(this.id.slice(5)) ); // skill1
     } )
 
 } )
