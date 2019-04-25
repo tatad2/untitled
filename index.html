@@ -1,29 +1,66 @@
 <!DOCTYPE html>
 
 <head>
+    <title>test page</title>
+
+    <!-- svg resource -->
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">
+
+    <!-- jQuery -->
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <!-- main -->
     <link rel="stylesheet" type="text/css" href="css/style.css">
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script> -->
     <script src="js/main.js"></script>
 </head>
 
 <body>
-    <h1>test</h1>
+    <div id="status-bar-left" class="panel panel-default">
+        <div class="panel-heading" style="background: gainsboro;">name</div>
+        
+        <div class="panel-body">
+            <div id="skill-open"> <i class="fa fa-book"></i>  skill </div>     
+        </div>
+    </div>
 
-    <table id="main-table" cellspacing="0">
-        <tr>
-            <td class="table"></td>
-            <td class="table"></td>
-            <td class="table"></td>
-        </tr>
-        <tr>
-            <td class="table" style="background: 'res/test.png'; background-size: cover"></td>
-            <td class="table"></td>
-            <td class="table"></td>
-        </tr>
-        <tr>
-            <td class="table"></td>
-            <td class="table"></td>
-            <td class="table"></td>
-        </tr>
-    </table>
+    <table id="map" cellspacing="0"></table>
+
+    <div id="popup-background" style="display: none"></div>
+
+    <!-- skill -->
+    <div id="skill-panel" style="display: none" class="popup-maindiv panel panel-default">
+        <div class="panel-heading" style="background: gainsboro;">Skill
+
+            <span id="skill-close" class="glyphicon glyphicon-remove close" aria-hidden="true"></span>
+        </div>
+        
+        <div id="skill-body" class="panel-body" style="overflow: scroll"></div>
+
+        <div class="panel-footer">
+            <div class="btn-group" data-toggle="buttons">
+            <label id="page0" class="btn btn-primary skill-pages active">
+                <input type="radio" name="options" autocomplete="off" checked> test page
+            </label>
+            <label id="page1" class="btn btn-primary skill-pages">
+                <input type="radio" name="options" autocomplete="off"> Type 1
+            </label>
+            </div>
+        </div>
+    </div>
+    
+
+    <script>
+        createMap(10, 10);
+        setMapPos();
+        moveTo(3, 3); 
+    </script>
 </body>
