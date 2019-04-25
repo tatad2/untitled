@@ -56,8 +56,10 @@ function moveTo(x, y) {
 }
 
 var skillInfo = [
-    { id: 0, page: 0, name: "test skill", pos: [20, 20], resUrl: "res/fireball.png", pre: [], learned: false },
-    { id: 1, page: 0, name: "test skill2", pos: [20, 20], resUrl: "res/fireball.png", pre: [], learned: false }
+    { id: 0, page: 0, name: "test skill", pos: [20, 20], resUrl: "res/fireball.png", pre: [], learned: true, 
+      describe: "test describe" },
+    { id: 1, page: 0, name: "test skill2", pos: [30, 50], resUrl: "res/fireball.png", pre: [], learned: false,
+      describe: "test2 describe" }
 ];
 
 function clearSkillPage() {
@@ -91,8 +93,18 @@ function displaySkillPage(pageId) {
         newEle.style.top = toPixel(top); 
         newEle.style.left = toPixel(left);
         newEle.style.backgroundImage = "url(" + i.resUrl + ")";
+        newEle.style.backgroundSize = "cover"; 
 
         anc.appendChild(newEle); 
+
+        var describeEle = document.createElement("p"); 
+        describeEle.id = "skilldescribe" + i.id.toString();
+
+        describeEle.classList.add("skill-describe");
+        describeEle.innerHTML = i.name + "<br>" + i.describe; 
+        describeEle.style.display = "none"; 
+
+        newEle.appendChild(describeEle); 
     }
 }
 
@@ -112,6 +124,16 @@ $(document).ready( function() {
     
     $(".skill-pages").click( function() {
         displaySkillPage( Number(this.id.slice(-1)) );
+    } )
+
+    $("#skill-body").on("mouseenter", ".skill-block", function() {
+        var id = "skilldescribe" + this.id.slice(-1); 
+        $("#"+id).css("display", ""); 
+    } )
+
+    $("#skill-body").on("mouseleave", ".skill-block", function() {
+        var id = "skilldescribe" + this.id.slice(-1); 
+        $("#"+id).css("display", "none"); 
     } )
 
 } )

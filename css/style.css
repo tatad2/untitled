@@ -90,14 +90,40 @@ html, body {
     /* height: 80%;  */
 }
 
+.skill-block:hover {
+    cursor: pointer;
+    border-color: #669933;
+}
+
 .skill-block {
     position: relative;
     border-radius: 10%;
-    border: 2px black solid;  
+    border: 2px #66CC66 solid;  
     width: 48px; 
     height: 48px; 
     min-width: 48px; 
     min-height: 48px;
     max-width: 48px;
     max-height: 48px;
+}
+
+.skill-block.unlearned:hover {
+    cursor: pointer;
+    border-color: black;
+}
+
+.skill-block.unlearned {
+    filter: grayscale(100%);
+    border-color: gray;
+}
+
+.skill-describe {
+    padding: 5px;
+    position: absolute; 
+    left: 120%; 
+    max-width: 300%; 
+    border: 2px black solid; 
+    border-radius: 10%; 
+    z-index: 52; 
+    background: white; 
 }
