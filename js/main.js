@@ -95,16 +95,12 @@ function displaySkillPage(pageId) {
         newEle.style.backgroundImage = "url(" + i.resUrl + ")";
         newEle.style.backgroundSize = "cover"; 
 
+        newEle.setAttribute("data-toggle", "popover");
+        newEle.setAttribute("data-placement", "right"); 
+        newEle.setAttribute("title", i.name); 
+        newEle.setAttribute("data-content", i.describe); 
+
         anc.appendChild(newEle); 
-
-        var describeEle = document.createElement("p"); 
-        describeEle.id = "skilldescribe" + i.id.toString();
-
-        describeEle.classList.add("skill-describe");
-        describeEle.innerHTML = i.name + "<br>" + i.describe; 
-        describeEle.style.display = "none"; 
-
-        newEle.appendChild(describeEle); 
     }
 }
 
@@ -127,13 +123,11 @@ $(document).ready( function() {
     } )
 
     $("#skill-body").on("mouseenter", ".skill-block", function() {
-        var id = "skilldescribe" + this.id.slice(-1); 
-        $("#"+id).css("display", ""); 
+        $(this).popover("show");
     } )
 
     $("#skill-body").on("mouseleave", ".skill-block", function() {
-        var id = "skilldescribe" + this.id.slice(-1); 
-        $("#"+id).css("display", "none"); 
+        $(this).popover("hide");
     } )
 
 } )
