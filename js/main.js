@@ -1,11 +1,6 @@
 var mapN, mapM; // map size 
 var curX, curY; // played position 
 
-let skillInfo = [    
-    { id: 0, page: 0, name: "test skill", pos: [20, 20], resUrl: "res/fireball.png", pre: [], learned: true, describe: "test describe", progress: 0.2, level:2 },
-    { id: 1, page: 0, name: "test skill2", pos: [80, 50], resUrl: "res/fireball.png", pre: [], learned: false, describe: "test2 describe", progress: 0, level:1 },
-]; 
-
 function getId(x, y) {
     return (x - 1) * mapM + y; 
 }
@@ -93,7 +88,7 @@ function displaySkillPage(pageId) {
         var left = i.pos[1]; 
 
         newEle.style.top = toPixel(top); 
-        newEle.style.left = toPixel(left);
+        newEle.style.left = toPixel(left);  
         newEle.style.backgroundImage = "url(" + i.resUrl + ")";
         newEle.style.backgroundSize = "cover"; 
 
@@ -149,6 +144,34 @@ function displaySkillFullInfo(skillId) {
     document.getElementById("skill-full-info-progress-bar").style.width = toPrecent(skillInfo[skillId].progress);
 }
 
+function clearInventory() {
+    var anc = document.getElementById("inventory-body"); 
+    while(anc.firstChild) anc.removeChild(anc.firstChild); 
+}
+
+function displayInventory() {
+    clearInventory();
+    var anc = document.getElementById("inventory-body"); 
+    
+    for(var i of inventoryInfo) {
+        if(i.cnt === 0) continue;
+
+        var newEle = document.createElement("div");
+        newEle.id = "inventory" + i.id.toString();
+
+        newEle.classList.add("inventory-block"); 
+
+        newEle.style.backgroundImage = "url(" + i.resUrl + ")";
+
+        newEle.setAttribute("data-toggle", "popover");
+        newEle.setAttribute("data-placement", "right"); 
+        newEle.setAttribute("title", i.name); 
+        newEle.setAttribute("data-content", i.describe);
+
+        anc.appendChild(newEle);
+    }
+}
+
 $(document).ready( function() {
 
     // skill
@@ -193,12 +216,20 @@ $(document).ready( function() {
         document.getElementById("popup-background").style.display = ""; 
         document.getElementById("inventory-panel").style.display = ""; 
         $("#inventory-body").css("height", (document.body.clientHeight * 0.7).toString() );
-        displayInventory(0);
+        displayInventory();
     } )
 
     $("#inventory-close").click( function() {
         document.getElementById("popup-background").style.display = "none"; 
         document.getElementById("inventory-panel").style.display = "none"; 
+    } )
+
+    $("#inventory-body").on("mouseenter", ".inventory-block", function() {
+        $(this).popover("show");
+    } )
+
+    $("#inventory-body").on("mouseleave", ".inventory-block", function() {
+        $(this).popover("hide");
     } )
 
 } )

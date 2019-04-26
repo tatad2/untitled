@@ -164,3 +164,30 @@ html, body {
     font-size: 32px;
     margin: 5px 20px;
 }
+
+#inventory-open:hover {
+    cursor: pointer;
+}
+
+.inventory-block {
+    width: 48px;
+    height: 48px; 
+    background-size: cover; 
+    border: 2px black solid;    
+    border-radius: 10%; 
+}
+
+.inventory-block:hover {
+    cursor: pointer;
+    border-color: grey;
+}
+
+.inventory-block {
+    border-radius: 10%;
+    width: 48px; 
+    height: 48px; 
+    min-width: 48px; 
+    min-height: 48px;
+    max-width: 48px;
+    max-height: 48px;
+}

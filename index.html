@@ -20,7 +20,9 @@
 
     <!-- main -->
     <link rel="stylesheet" type="text/css" href="css/style.css">
-    <script src="js/main.js"></script>
+    <script src="js/skill.js"> </script>
+    <script src="js/inventory.js"> </script>
+    <script src="js/main.js"> </script>
 </head>
 
 <body>
@@ -41,7 +43,7 @@
 
     <!-- skill -->
     <div id="skill-panel" style="display: none" class="popup-maindiv panel panel-default">
-        <div class="panel-heading" style="background: gainsboro;">Skill
+        <div class="panel-heading" style="background: gainsboro;"> Skill
 
             <span id="skill-close" class="glyphicon glyphicon-remove close" aria-hidden="true"></span>
         </div>
@@ -86,6 +88,18 @@
             <button id="skill-full-info-learn" type="button" style="width: 100%;" class="btn btn-success">Learn</button>
         </div>
     </div>
+
+    
+    <!-- inventory -->
+    <div id="inventory-panel" style="display: none; width:80%" class="popup-maindiv panel panel-default">
+        <div class="panel-heading" style="background: gainsboro;"> Inventory
+
+            <span id="inventory-close" class="glyphicon glyphicon-remove close" aria-hidden="true"></span>
+        </div>
+        
+        <div id="inventory-body" class="panel-body" style="overflow: scroll; display: flex;"> </div>
+
+    </div>    
 
     <script>
         createMap(10, 10);
