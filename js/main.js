@@ -1,6 +1,11 @@
 var mapN, mapM; // map size 
 var curX, curY; // played position 
 
+let skillInfo = [    
+    { id: 0, page: 0, name: "test skill", pos: [20, 20], resUrl: "res/fireball.png", pre: [], learned: true, describe: "test describe", progress: 0.2, level:2 },
+    { id: 1, page: 0, name: "test skill2", pos: [80, 50], resUrl: "res/fireball.png", pre: [], learned: false, describe: "test2 describe", progress: 0, level:1 },
+]; 
+
 function getId(x, y) {
     return (x - 1) * mapM + y; 
 }
@@ -11,6 +16,10 @@ function getBlockEle(x, y) {
 
 function toPixel(x) {
     return x.toString() + "px";
+}
+
+function toPrecent(x) { 
+    return ( x * 100 ).toString() + "%";
 }
 
 function createMap(n, m) {
@@ -55,11 +64,6 @@ function moveTo(x, y) {
     setMapPos(); 
 }
 
-var skillInfo = [
-    { id: 0, page: 0, name: "test skill", pos: [20, 20], resUrl: "res/fireball.png", pre: [], learned: true, describe: "test describe" },
-    { id: 1, page: 0, name: "test skill2", pos: [30, 50], resUrl: "res/fireball.png", pre: [], learned: false, describe: "test2 describe" }
-];
-
 function clearSkillPage() {
     var anc = document.getElementById("skill-body"); 
     while(anc.firstChild) anc.removeChild(anc.firstChild); 
@@ -99,18 +103,55 @@ function displaySkillPage(pageId) {
         newEle.setAttribute("data-content", i.describe); 
 
         anc.appendChild(newEle); 
+
+        if(!i.learned) continue;
+
+        var levelEle = document.createElement("div");
+        levelEle.id = "skill-level" + i.id.toString(); 
+
+        levelEle.classList.add("progress"); 
+
+        levelEle.style.top = "120%"; 
+        levelEle.style.position = "absolute"; 
+        levelEle.style.width = "100%"; 
+        levelEle.style.height = "20%";
+
+        var levelUpProgress = toPrecent(i.progress); 
+        levelEle.innerHTML = '<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: ' + levelUpProgress + ';"></div>'
+
+        newEle.appendChild(levelEle); 
     }
 }
 
 function displaySkillFullInfo(skillId) {
+    var curSkill = skillInfo[skillId];
+
     document.getElementById("popup-background2").style.display = "";
     document.getElementById("skill-full-info-panel").style.display = "";
 
-    var temp = document.getElementById("skill-full-info-panel-title").innerHTML;
-    document.getElementById("skill-full-info-panel-title").innerHTML = skillInfo[skillId].name + temp;
+    document.getElementById("skill-full-info-icon").style.backgroundImage = "url(" + skillInfo[skillId].resUrl + ")";
+    
+    var name = curSkill.name; 
+    if(!curSkill.learned) name = name + " (not learned)"
+    else name = name + " (Lv " + curSkill.level.toString() + ")";
+    document.getElementById("skill-full-info-name").innerHTML = name; 
+
+    var flag = skillInfo[skillId].learned;
+    var learnEle = document.getElementById("skill-full-info-learn");
+    
+    if(flag) learnEle.setAttribute("disabled", "disabled");
+    else learnEle.removeAttribute("disabled"); 
+    learnEle.innerHTML = flag ? "learned" : "learn"; 
+
+    document.getElementById("skill-full-info-description").innerHTML = skillInfo[skillId].describe;
+
+    document.getElementById("skill-full-info-progress-bar").innerHTML = toPrecent(skillInfo[skillId].progress);
+    document.getElementById("skill-full-info-progress-bar").style.width = toPrecent(skillInfo[skillId].progress);
 }
 
 $(document).ready( function() {
+
+    // skill
 
     $("#skill-open").click( function() {
         document.getElementById("popup-background").style.display = ""; 
@@ -144,6 +185,20 @@ $(document).ready( function() {
     $("#skill-body").on("click", ".skill-block", function() {
         $(this).popover("hide");
         displaySkillFullInfo( Number(this.id.slice(5)) ); // skill1
+    } )
+
+    // inventory
+
+    $("#inventory-open").click( function() {
+        document.getElementById("popup-background").style.display = ""; 
+        document.getElementById("inventory-panel").style.display = ""; 
+        $("#inventory-body").css("height", (document.body.clientHeight * 0.7).toString() );
+        displayInventory(0);
+    } )
+
+    $("#inventory-close").click( function() {
+        document.getElementById("popup-background").style.display = "none"; 
+        document.getElementById("inventory-panel").style.display = "none"; 
     } )
 
 } )

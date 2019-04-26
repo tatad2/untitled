@@ -24,11 +24,13 @@
 </head>
 
 <body>
+    <!-- status bar -->
     <div id="status-bar-left" class="panel panel-default">
         <div class="panel-heading" style="background: gainsboro;">name</div>
         
         <div class="panel-body">
             <div id="skill-open"> <i class="fa fa-book"></i>  skill </div>     
+            <div id="inventory-open" style="margin: 5px 0"> <i class="fa fa-inbox"></i>  inventory </div>
         </div>
     </div>
 
@@ -61,15 +63,32 @@
     <!-- skill full info  -->
     <div id="skill-full-info-panel" style="display: none; width: 60%;" class="popup-maindiv2 panel panel-default">
         <div id="skill-full-info-panel-title" class="panel-heading" style="background: gainsboro">
+            Skill Info
             <span id="skill-full-info-close" class="glyphicon glyphicon-remove close" aria-hidden="true"></span>
         </div>
 
-        <div id="skill-full-info-body" class="panel-body" style="overflow: scroll"></div>
+        <div id="skill-full-info-body" class="panel-body">
+            <div style="display: flex">
+                <div id="skill-full-info-icon" class=""> </div>
+                <div id="skill-full-info-name" class=""> </div> 
+             </div>
+
+            <div class="progress" style="margin: 5px 0;">
+                <div id="skill-full-info-progress-bar" class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 20%;"> 20% </div>
+            </div>
+
+            <div class="split-line"> </div>
+            
+            <p id="skill-full-info-description"></p>
+
+            <div class="split-line"> </div>
+
+            <button id="skill-full-info-learn" type="button" style="width: 100%;" class="btn btn-success">Learn</button>
+        </div>
     </div>
 
     <script>
         createMap(10, 10);
-        setMapPos();
         moveTo(3, 3); 
     </script>
 </body>
