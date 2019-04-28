@@ -20,26 +20,71 @@
 
     <!-- main -->
     <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="js/player.js"> </script>
+    <script src="js/map.js"> </script>
     <script src="js/skill.js"> </script>
-    <script src="js/inventory.js"> </script>
+    <script src="js/item.js"> </script>
     <script src="js/main.js"> </script>
 </head>
 
 <body>
+
+    <table id="map" cellspacing="0"></table>
+
+    <!-- popup background -->
+    <div id="popup-background" style="display: none"> </div>
+    <div id="popup-background2" style="display: none"> </div>
+    <div id="popup-background3" style="display: none"> </div>
+
     <!-- status bar -->
     <div id="status-bar-left" class="panel panel-default">
-        <div class="panel-heading" style="background: gainsboro;">name</div>
-        
+        <div id="status-bar-name" class="panel-heading" style="background: gainsboro;">name</div>
+       
         <div class="panel-body">
+
+            <!-- lv -->
+            <div id="status-bar-level" class="inline" style="margin-right: 5px  "> Lv.5 </div>
+            <div id="status-bar-exp" class="inline"> 80/100 </div>
+            <div class="progress" style="height: 10px; margin-top: 3px; margin-bottom: 10px">
+                <div id="status-bar-exp-progress-bar" class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                    <span class="sr-only"> </span>
+                </div>
+            </div>
+
+            <!-- hp -->
+            <i class="fa fa-heart inline" style="color: red"> </i>
+            <div id="status-bar-hp" class="inline"> 80/100 </div>
+            <div class="progress" style="height: 10px; margin-top: 3px; margin-bottom: 10px">
+                <div id="status-bar-hp-progress-bar" class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                    <span class="sr-only"> </span>
+                </div>
+            </div>
+
+            <!-- mp -->
+            <i class="fa fa-magic inline" style="color: blue"> </i>
+            <div id="status-bar-mp" class="inline"> 80/100 </div>
+            <div class="progress" style="height: 10px; margin-top: 3px; margin-bottom: 10px">
+                <div id="status-bar-mp-progress-bar" class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                    <span class="sr-only"> </span>
+                </div>
+            </div>
+
+            <!-- other -->
+
+            <table class="table table-condensed">
+                <tr> <td>atk</td> <td id="status-bar-atk">50</td> </tr>
+                <tr> <td>def</td> <td id="status-bar-def">50</td> </tr>
+                <tr> <td>int</td> <td id="status-bar-int">50</td> </tr>
+                <tr> <td>res</td> <td id="status-bar-res">50</td> </tr>
+                <tr> <td>mov</td> <td id="status-bar-mov">50</td> </tr>
+            </table>
+
+            <hr style="filter: alpha(opacity=100, finishopacity=0, style=3); margin: 10px auto" width="100%" color="#6f5499" size="3" />
+
             <div id="skill-open"> <i class="fa fa-book"></i>  skill </div>     
             <div id="inventory-open" style="margin: 5px 0"> <i class="fa fa-inbox"></i>  inventory </div>
         </div>
     </div>
-
-    <table id="map" cellspacing="0"></table>
-
-    <div id="popup-background" style="display: none"></div>
-    <div id="popup-background2" style="display: none"></div>
 
     <!-- skill -->
     <div id="skill-panel" style="display: none" class="popup-maindiv panel panel-default">
@@ -88,7 +133,6 @@
             <button id="skill-full-info-learn" type="button" style="width: 100%;" class="btn btn-success">Learn</button>
         </div>
     </div>
-
     
     <!-- inventory -->
     <div id="inventory-panel" style="display: none; width:80%" class="popup-maindiv panel panel-default">
@@ -101,8 +145,35 @@
 
     </div>    
 
+    <!-- item info -->
+    <div id="item-info-panel" style="display: none; width: 60%;" class="popup-maindiv2 panel panel-default">
+            <div id="item-info-panel-title" class="panel-heading" style="background: gainsboro">
+                Item Info
+                <span id="item-info-close" class="glyphicon glyphicon-remove close" aria-hidden="true"></span>
+            </div>
+    
+            <div id="item-info-body" class="panel-body">
+                <div style="display: flex">
+                    <div id="item-info-icon" class=""> </div>
+                    <div id="item-info-name" class=""> </div> 
+                </div>
+    
+                <div id="item-info-amount"> </div>
+    
+                <div class="split-line"> </div>
+                
+                <p id="item-info-description"></p>
+    
+                <div class="split-line"> </div>
+    
+                <button id="item-info-use" type="button" style="width: 100%;" class="btn btn-primary">Use</button>
+            </div>
+        </div>
+
     <script>
         createMap(10, 10);
         moveTo(3, 3); 
+        updateStatusBar();
     </script>
+
 </body>

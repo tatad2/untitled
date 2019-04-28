@@ -1,13 +1,4 @@
-var mapN, mapM; // map size 
-var curX, curY; // played position 
-
-function getId(x, y) {
-    return (x - 1) * mapM + y; 
-}
-
-function getBlockEle(x, y) { 
-    return document.getElementById( "block" + getId(x, y).toString() ); 
-}
+statement = "normal"; 
 
 function toPixel(x) {
     return x.toString() + "px";
@@ -15,48 +6,6 @@ function toPixel(x) {
 
 function toPrecent(x) { 
     return ( x * 100 ).toString() + "%";
-}
-
-function createMap(n, m) {
-    mapN = n; mapM = m; curX = curY = 1; 
-    var ele = document.getElementById("map");
-    
-    for (var i = 1; i <= n; i ++) {
-        var row = document.createElement("tr"); 
-        ele.appendChild(row); 
-
-        for (var j = 1; j <= m; j ++) {
-            var col = document.createElement("td");
-            col.id = "block" + getId(i, j);
-            col.classList.add("block");
-            row.appendChild(col);
-        }
-    }
-}
-
-function clearMap() {
-    var ele = document.getElementById("map");
-    while( ele.firstChild ) {
-        ele.removeChild( ele.firstChild );
-    }
-}
-
-function setMapPos() {
-    var leftPx = ( document.body.clientWidth / 2 - 17 ) - ( curY - 1 ) * 34; 
-    var topPx = ( document.body.clientHeight / 2 - 17 ) - ( curX - 1 ) * 34; 
-
-    var mapEle = document.getElementById("map"); 
-    mapEle.style.top = toPixel(topPx); 
-    mapEle.style.left = toPixel(leftPx); 
-}
-
-function moveTo(x, y) {
-    getBlockEle(curX, curY).classList.remove("player-on"); 
-    
-    curX = x; curY = y; 
-    getBlockEle(x, y).classList.add("player-on"); 
-
-    setMapPos(); 
 }
 
 function clearSkillPage() {
@@ -153,23 +102,93 @@ function displayInventory() {
     clearInventory();
     var anc = document.getElementById("inventory-body"); 
     
-    for(var i of inventoryInfo) {
+    for(var i of itemInfo) {
         if(i.cnt === 0) continue;
+        
+        // main element
 
         var newEle = document.createElement("div");
-        newEle.id = "inventory" + i.id.toString();
 
+        newEle.id = "inventory" + i.id.toString();
         newEle.classList.add("inventory-block"); 
 
         newEle.style.backgroundImage = "url(" + i.resUrl + ")";
 
-        newEle.setAttribute("data-toggle", "popover");
-        newEle.setAttribute("data-placement", "right"); 
-        newEle.setAttribute("title", i.name); 
-        newEle.setAttribute("data-content", i.describe);
+        // newEle.setAttribute("data-toggle", "popover");
+        // newEle.setAttribute("data-placement", "right"); 
+        // newEle.setAttribute("title", i.name); 
+        // newEle.setAttribute("data-content", i.describe);
 
         anc.appendChild(newEle);
+
+        // cnt element
+
+        var cntEle = document.createElement("div"); 
+        
+        cntEle.id = "inventory-cnt" + i.id.toString(); 
+        cntEle.classList.add("inventory-block-cnt"); 
+        cntEle.innerHTML = i.cnt.toString(); 
+
+        newEle.appendChild(cntEle); 
+
+        cntEle.style.top = toPixel( newEle.offsetHeight - cntEle.offsetHeight - 2 );    
+   
+        // dropdown element
+
+        var dropEle = document.createElement("div"); 
+
+        dropEle.id = "inventory-drop" + i.id.toString(); 
+        dropEle.classList.add("dropdown"); 
+
+        dropEle.innerHTML =
+        '\
+        <div href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"> </div>\
+        <ul class="dropdown-menu inventory-dropdown" aria-labelledby="inventory-drop'  + i.id.toString() + '">\ '
+            + (i.canUse ? '<li><a onclick="useItem(' + i.id.toString() +  ')">Use</a></li>\ ' : '') +
+            '<li><a onclick="displayItemInfo(' + i.id.toString() +  ')">Info</a></li>\
+        </ul>\
+        ';
+
+        newEle.appendChild(dropEle);
+
     }
+}
+
+function displayItemInfo(itemId)
+{
+    var curItem = itemInfo[itemId];
+
+    document.getElementById("popup-background2").style.display = "";
+    document.getElementById("item-info-panel").style.display = "";
+
+    document.getElementById("item-info-icon").style.backgroundImage = "url(" + curItem.resUrl + ")";
+
+    document.getElementById("item-info-name").innerHTML = curItem.name; 
+
+    document.getElementById("item-info-amount").innerHTML = "amount: " + curItem.cnt.toString(); 
+
+    var useEle = document.getElementById("item-info-use");
+
+    if(!curItem.canUse) useEle.setAttribute("disabled", "disabled");
+    else useEle.removeAttribute("disabled"); 
+    useEle.innerHTML = "use"; 
+
+    document.getElementById("item-info-description").innerHTML = curItem.describe;
+}
+
+function openDropdown(id) { 
+    document.getElementById(id).classList.add("open"); 
+}
+
+function closeDropdown(id) {
+    document.getElementById(id).classList.remove("open"); 
+}
+
+function onKeyDown(keyId) {
+    if(keyId == 87) mapMoveStep(-1, 0);
+    if(keyId == 65) mapMoveStep(0, -1);
+    if(keyId == 83) mapMoveStep(1, 0);
+    if(keyId == 68) mapMoveStep(0, 1);  
 }
 
 $(document).ready( function() {
@@ -188,7 +207,7 @@ $(document).ready( function() {
         document.getElementById("skill-panel").style.display = "none"; 
     } )
     
-    $("#skill-full-info-panel").on("click", "#skill-full-info-close", function() {
+    $("#skill-full-info-close").click( function() {
         document.getElementById("popup-background2").style.display = "none"; 
         document.getElementById("skill-full-info-panel").style.display = "none"; 
     } )
@@ -225,11 +244,41 @@ $(document).ready( function() {
     } )
 
     $("#inventory-body").on("mouseenter", ".inventory-block", function() {
-        $(this).popover("show");
+        var id = "inventory-drop" + this.id.slice(9); 
+        openDropdown(id); 
     } )
 
     $("#inventory-body").on("mouseleave", ".inventory-block", function() {
-        $(this).popover("hide");
+        var id = "inventory-drop" + this.id.slice(9); 
+        closeDropdown(id); 
     } )
 
+    $("#item-info-close").click( function() { 
+        document.getElementById("popup-background2").style.display = "none"; 
+        document.getElementById("item-info-panel").style.display = "none"; 
+    } )
+
+    // map
+
+    $(".block").hover( function() {
+        if(statement === "selectPosition") {
+            selectPosMouseon(this.id.slice(5)); return;
+        }
+        $(this).css("background", "#90EE90"); 
+    }, function() {
+        if(statement === "selectPosition") {
+            selectPosMouseleave(this.id.slice(5)); return;
+        }
+        $(this).css("background", ""); 
+    } )
+
+    $(".block").click( function() {
+        if(statement === "selectPosition") {
+            selectPosClick(this.id.slice(5)); return;
+        }
+    } )
+
+    $(document).keydown( function(event) {
+        onKeyDown(event.which); 
+    } )
 } )
