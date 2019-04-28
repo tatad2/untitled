@@ -5,7 +5,7 @@ var player = {
     exp: 8, 
     needExp: 15,
     maxHp: 100, 
-    hp: 80, 
+    hp: 30, 
     maxMp: 100, 
     mp: 40, 
     atk: 10, 

@@ -20,9 +20,11 @@
 
     <!-- main -->
     <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="js/tools.js"> </script>
     <script src="js/player.js"> </script>
     <script src="js/map.js"> </script>
     <script src="js/skill.js"> </script>
+    <script src="js/enemy.js"> </script>
     <script src="js/item.js"> </script>
     <script src="js/main.js"> </script>
 </head>
@@ -38,7 +40,7 @@
 
     <!-- status bar -->
     <div id="status-bar-left" class="panel panel-default">
-        <div id="status-bar-name" class="panel-heading" style="background: gainsboro;">name</div>
+        <div id="status-bar-name" class="panel-heading" style="background: gainsboro;"> name </div>
        
         <div class="panel-body">
 
@@ -83,6 +85,30 @@
 
             <div id="skill-open"> <i class="fa fa-book"></i>  skill </div>     
             <div id="inventory-open" style="margin: 5px 0"> <i class="fa fa-inbox"></i>  inventory </div>
+        </div>
+    </div>
+
+    <!-- enemy status bar -->
+    <div id="enemy-status-bar-panel" style="display: none;" class="panel panel-default">
+        <div id="enemy-status-bar-name" class="panel-heading" style="background: gainsboro;"> name </div>
+       
+        <div class="panel-body">
+
+            <div style="display: flex">
+                <div id="enemy-status-bar-icon"> </div>
+                
+                <div>
+                    <i class="fa fa-heart inline" style="color: red"> </i>
+                    <div id="enemy-status-bar-hp" class="inline"> 80/100 </div>
+                    
+                    <div class="progress" style="height: 10px; margin-top: 3px; margin-bottom: 10px; width: 100px">
+                        <div id="enemy-status-bar-hp-progress-bar" class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                            <span class="sr-only"> </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -147,33 +173,49 @@
 
     <!-- item info -->
     <div id="item-info-panel" style="display: none; width: 60%;" class="popup-maindiv2 panel panel-default">
-            <div id="item-info-panel-title" class="panel-heading" style="background: gainsboro">
-                Item Info
-                <span id="item-info-close" class="glyphicon glyphicon-remove close" aria-hidden="true"></span>
-            </div>
-    
-            <div id="item-info-body" class="panel-body">
-                <div style="display: flex">
-                    <div id="item-info-icon" class=""> </div>
-                    <div id="item-info-name" class=""> </div> 
-                </div>
-    
-                <div id="item-info-amount"> </div>
-    
-                <div class="split-line"> </div>
-                
-                <p id="item-info-description"></p>
-    
-                <div class="split-line"> </div>
-    
-                <button id="item-info-use" type="button" style="width: 100%;" class="btn btn-primary">Use</button>
-            </div>
+        <div id="item-info-panel-title" class="panel-heading" style="background: gainsboro">
+            Item Info
+            <span id="item-info-close" class="glyphicon glyphicon-remove close" aria-hidden="true"></span>
         </div>
+
+        <div id="item-info-body" class="panel-body">
+            <div style="display: flex">
+                <div id="item-info-icon" class=""> </div>
+                <div id="item-info-name" class=""> </div> 
+            </div>
+
+            <div id="item-info-amount"> </div>
+
+            <div class="split-line"> </div>
+            
+            <p id="item-info-description"></p>
+
+            <div class="split-line"> </div>
+
+            <button id="item-info-use" type="button" style="width: 100%;" class="btn btn-primary">Use</button>
+        </div>
+    </div>
+
+    <!-- number input -->
+    <div id="number-input-panel" style="display: none;" class="popup-maindiv3 panel panel-default">
+        <div id="number-input-title" class="panel-heading" style="background: gainsboro"> </div>
+        
+        <form class="form-inline" style="margin: 20px">
+            <div class="form-group">
+                <div class="input-group">
+                    <input id="number-input-input" type="text" class="form-control" id="exampleInputAmount" maxlength="10">
+                </div>
+            </div>
+            <button id="number-input-button" type="submit" class="btn btn-primary" onclick="checkInput()"> OK </button>
+            <div id="number-input-error-info"> </div>
+        </form>
+    </div>
 
     <script>
         createMap(10, 10);
         moveTo(3, 3); 
         updateStatusBar();
+        generateEnemy(0, 2, 2); 
     </script>
 
 </body>

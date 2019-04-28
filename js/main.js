@@ -1,4 +1,5 @@
-statement = "normal"; 
+var statement = "normal"; 
+var enemyStatusBarId = 0;
 
 function toPixel(x) {
     return x.toString() + "px";
@@ -129,6 +130,8 @@ function displayInventory() {
         cntEle.classList.add("inventory-block-cnt"); 
         cntEle.innerHTML = i.cnt.toString(); 
 
+        console.log(i.cnt); 
+
         newEle.appendChild(cntEle); 
 
         cntEle.style.top = toPixel( newEle.offsetHeight - cntEle.offsetHeight - 2 );    
@@ -143,14 +146,16 @@ function displayInventory() {
         dropEle.innerHTML =
         '\
         <div href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"> </div>\
-        <ul class="dropdown-menu inventory-dropdown" aria-labelledby="inventory-drop'  + i.id.toString() + '">\ '
-            + (i.canUse ? '<li><a onclick="useItem(' + i.id.toString() +  ')">Use</a></li>\ ' : '') +
+        <ul class="dropdown-menu inventory-dropdown" aria-labelledby="inventory-drop'  + i.id.toString() + '">\ ' +
+            (i.canUse ? '<li><a onclick="useItem(' + i.id.toString() +  ')">Use</a></li>\ ' : '') +
+            (i.batchUse ? '<li><a onclick="batchUseItem(' + i.id.toString() +  ')">Batch use</a></li>\ ' : '') +
             '<li><a onclick="displayItemInfo(' + i.id.toString() +  ')">Info</a></li>\
+            <li role="separator" class="divider"></li> \
+            <li><a onclick="dropItem(' + i.id.toString() +  ')">Drop</a></li>\
         </ul>\
         ';
 
         newEle.appendChild(dropEle);
-
     }
 }
 
@@ -176,6 +181,25 @@ function displayItemInfo(itemId)
     document.getElementById("item-info-description").innerHTML = curItem.describe;
 }
 
+function updateEnemyStatusBar() {
+    var cur = curEnemy[enemyStatusBarId]; 
+    if(cur.cleared === true) {
+        $("#enemy-status-bar-panel").css("display", "none"); return;
+    }
+
+    $("#enemy-status-bar-panel").css("display", ""); 
+
+    $("#enemy-status-bar-name").html(cur.name); 
+    $("#enemy-status-bar-icon").css("background-image", "url(" + cur.resUrl + ")");
+    $("#enemy-status-bar-hp").html(cur.hp.toString() + "/" + cur.maxHp.toString()); 
+    $("#enemy-status-bar-hp-progress-bar").css("width", toPrecent(cur.hp / cur.maxHp));  
+}
+
+function redirectEnemyStatusBar(enemyId) {
+    enemyStatusBarId = enemyId; 
+    updateEnemyStatusBar(); 
+}
+
 function openDropdown(id) { 
     document.getElementById(id).classList.add("open"); 
 }
@@ -185,10 +209,18 @@ function closeDropdown(id) {
 }
 
 function onKeyDown(keyId) {
-    if(keyId == 87) mapMoveStep(-1, 0);
-    if(keyId == 65) mapMoveStep(0, -1);
-    if(keyId == 83) mapMoveStep(1, 0);
-    if(keyId == 68) mapMoveStep(0, 1);  
+    if(statement === "normal") {
+        if(keyId == 87) mapMoveStep(-1, 0);
+        if(keyId == 65) mapMoveStep(0, -1);
+        if(keyId == 83) mapMoveStep(1, 0);
+        if(keyId == 68) mapMoveStep(0, 1);  
+    }
+    if(statement === "selectPosition") {
+        if(keyId == 87) setMapPos(map.foucsx-1, map.foucsy);
+        if(keyId == 65) setMapPos(map.foucsx, map.foucsy-1);
+        if(keyId == 83) setMapPos(map.foucsx+1, map.foucsy);
+        if(keyId == 68) setMapPos(map.foucsx, map.foucsy+1);
+    }
 }
 
 $(document).ready( function() {
@@ -264,17 +296,25 @@ $(document).ready( function() {
         if(statement === "selectPosition") {
             selectPosMouseon(this.id.slice(5)); return;
         }
-        $(this).css("background", "#90EE90"); 
+        $(this).css("background-color", "#90EE90"); 
     }, function() {
         if(statement === "selectPosition") {
             selectPosMouseleave(this.id.slice(5)); return;
         }
-        $(this).css("background", ""); 
+        $(this).css("background-color", ""); 
     } )
 
     $(".block").click( function() {
         if(statement === "selectPosition") {
             selectPosClick(this.id.slice(5)); return;
+        }
+
+        for(var i = 0; i < curEnemy.length; i ++) {
+            if(curEnemy[i].cleared) continue; 
+
+            if(this.id.slice(5) == getId(curEnemy[i].x, curEnemy[i].y)) {
+                redirectEnemyStatusBar(i); break;
+            }
         }
     } )
 

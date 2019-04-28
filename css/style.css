@@ -66,6 +66,14 @@ html, body {
     transform: translateY(-50%) translateX(-50%);
 }
 
+.popup-maindiv3 {
+    position: absolute;
+    z-index: 250;
+    top: 50%; 
+    left: 50%; 
+    transform: translateY(-50%) translateX(-50%);
+}
+
 .center {
     position: absolute;
     top: 50%; 
@@ -102,6 +110,14 @@ html, body {
     z-index: 10;
 }
 
+#enemy-status-bar-panel {
+    position: absolute; 
+    top: 2%; 
+    right: 2%; 
+    z-index: 10; 
+    /* width: 20%; */
+}
+
 /* map */
 
 #map { 
@@ -122,6 +138,7 @@ html, body {
 
 .fog {
     background: gainsboro; 
+    opacity: 1;
 }
 
 .player-on {
@@ -215,4 +232,25 @@ html, body {
     position: relative; 
     top: 80%; 
     left: 80%; 
+}
+
+#number-input-error-info {
+    text-align: center; 
+    margin-top: 10px;
+    font-size: 16px; 
+    color: red; 
+}
+
+#enemy-status-bar-icon {
+    /* display: ; */
+    margin-right: 10px;
+    border: 2px solid black;
+    border-radius: 10%;
+    width: 36px; 
+    height: 36px; 
+    /* min-width: 48px; 
+    min-height: 48px;
+    max-width: 48px;
+    max-height: 48px;
+} */ 
 }
